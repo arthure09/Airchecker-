@@ -3,8 +3,7 @@
 A modern Flutter application that displays real-time Air Quality Index (AQI) data with a sleek, minimalist dark theme design.
 
 ## Screenshot
-
-<img src="https://github.com/user-attachments/assets/d34a1ff9-734b-4a06-86fc-4c31acb79da7" width="300" alt="AQI Map Screenshot">
+<img src="https://github.com/user-attachments/assets/dfdbd4eb-60f9-4e7a-a230-3186c8459a4d" width="300" alt="AQI Map Screenshot">
 
 ## Features
 
