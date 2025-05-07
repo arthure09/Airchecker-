@@ -6,11 +6,11 @@ part of 'app_dio.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$appDioHash() => r'fe1a30decbecd48942d012923b08fc8b2465b27c';
+String _$appDioHash() => r'f4380821e5476bcafb6e9b488c70d3ee8eb070ad';
 
 /// See also [appDio].
 @ProviderFor(appDio)
-final appDioProvider = Provider<Dio>.internal(
+final appDioProvider = AutoDisposeProvider<Dio>.internal(
   appDio,
   name: r'appDioProvider',
   debugGetCreateSourceHash:
@@ -21,6 +21,6 @@ final appDioProvider = Provider<Dio>.internal(
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef AppDioRef = ProviderRef<Dio>;
+typedef AppDioRef = AutoDisposeProviderRef<Dio>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

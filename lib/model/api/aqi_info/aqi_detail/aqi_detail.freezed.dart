@@ -20,16 +20,18 @@ AqiDetail _$AqiDetailFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AqiDetail {
-  @JsonKey(name: 'co')
-  AqiDetailItem get co => throw _privateConstructorUsedError;
-  @JsonKey(name: 'no2')
-  AqiDetailItem get no2 => throw _privateConstructorUsedError;
-  @JsonKey(name: 'o3')
-  AqiDetailItem get o3 => throw _privateConstructorUsedError;
-  @JsonKey(name: 'so2')
-  AqiDetailItem get so2 => throw _privateConstructorUsedError;
-  @JsonKey(name: 'pm25')
-  AqiDetailItem get pm25 => throw _privateConstructorUsedError;
+  AqiIaqi? get pm25 => throw _privateConstructorUsedError;
+  AqiIaqi? get pm10 => throw _privateConstructorUsedError;
+  AqiIaqi? get o3 => throw _privateConstructorUsedError;
+  AqiIaqi? get no2 => throw _privateConstructorUsedError;
+  AqiIaqi? get so2 => throw _privateConstructorUsedError;
+  AqiIaqi? get co => throw _privateConstructorUsedError;
+  AqiIaqi? get h => throw _privateConstructorUsedError;
+  AqiIaqi? get t => throw _privateConstructorUsedError;
+  AqiIaqi? get w => throw _privateConstructorUsedError;
+  AqiIaqi? get p => throw _privateConstructorUsedError;
+  AqiIaqi? get dew => throw _privateConstructorUsedError;
+  AqiIaqi? get r => throw _privateConstructorUsedError;
 
   /// Serializes this AqiDetail to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -47,17 +49,31 @@ abstract class $AqiDetailCopyWith<$Res> {
       _$AqiDetailCopyWithImpl<$Res, AqiDetail>;
   @useResult
   $Res call(
-      {@JsonKey(name: 'co') AqiDetailItem co,
-      @JsonKey(name: 'no2') AqiDetailItem no2,
-      @JsonKey(name: 'o3') AqiDetailItem o3,
-      @JsonKey(name: 'so2') AqiDetailItem so2,
-      @JsonKey(name: 'pm25') AqiDetailItem pm25});
+      {AqiIaqi? pm25,
+      AqiIaqi? pm10,
+      AqiIaqi? o3,
+      AqiIaqi? no2,
+      AqiIaqi? so2,
+      AqiIaqi? co,
+      AqiIaqi? h,
+      AqiIaqi? t,
+      AqiIaqi? w,
+      AqiIaqi? p,
+      AqiIaqi? dew,
+      AqiIaqi? r});
 
-  $AqiDetailItemCopyWith<$Res> get co;
-  $AqiDetailItemCopyWith<$Res> get no2;
-  $AqiDetailItemCopyWith<$Res> get o3;
-  $AqiDetailItemCopyWith<$Res> get so2;
-  $AqiDetailItemCopyWith<$Res> get pm25;
+  $AqiIaqiCopyWith<$Res>? get pm25;
+  $AqiIaqiCopyWith<$Res>? get pm10;
+  $AqiIaqiCopyWith<$Res>? get o3;
+  $AqiIaqiCopyWith<$Res>? get no2;
+  $AqiIaqiCopyWith<$Res>? get so2;
+  $AqiIaqiCopyWith<$Res>? get co;
+  $AqiIaqiCopyWith<$Res>? get h;
+  $AqiIaqiCopyWith<$Res>? get t;
+  $AqiIaqiCopyWith<$Res>? get w;
+  $AqiIaqiCopyWith<$Res>? get p;
+  $AqiIaqiCopyWith<$Res>? get dew;
+  $AqiIaqiCopyWith<$Res>? get r;
 }
 
 /// @nodoc
@@ -75,33 +91,68 @@ class _$AqiDetailCopyWithImpl<$Res, $Val extends AqiDetail>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? co = null,
-    Object? no2 = null,
-    Object? o3 = null,
-    Object? so2 = null,
-    Object? pm25 = null,
+    Object? pm25 = freezed,
+    Object? pm10 = freezed,
+    Object? o3 = freezed,
+    Object? no2 = freezed,
+    Object? so2 = freezed,
+    Object? co = freezed,
+    Object? h = freezed,
+    Object? t = freezed,
+    Object? w = freezed,
+    Object? p = freezed,
+    Object? dew = freezed,
+    Object? r = freezed,
   }) {
     return _then(_value.copyWith(
-      co: null == co
-          ? _value.co
-          : co // ignore: cast_nullable_to_non_nullable
-              as AqiDetailItem,
-      no2: null == no2
-          ? _value.no2
-          : no2 // ignore: cast_nullable_to_non_nullable
-              as AqiDetailItem,
-      o3: null == o3
-          ? _value.o3
-          : o3 // ignore: cast_nullable_to_non_nullable
-              as AqiDetailItem,
-      so2: null == so2
-          ? _value.so2
-          : so2 // ignore: cast_nullable_to_non_nullable
-              as AqiDetailItem,
-      pm25: null == pm25
+      pm25: freezed == pm25
           ? _value.pm25
           : pm25 // ignore: cast_nullable_to_non_nullable
-              as AqiDetailItem,
+              as AqiIaqi?,
+      pm10: freezed == pm10
+          ? _value.pm10
+          : pm10 // ignore: cast_nullable_to_non_nullable
+              as AqiIaqi?,
+      o3: freezed == o3
+          ? _value.o3
+          : o3 // ignore: cast_nullable_to_non_nullable
+              as AqiIaqi?,
+      no2: freezed == no2
+          ? _value.no2
+          : no2 // ignore: cast_nullable_to_non_nullable
+              as AqiIaqi?,
+      so2: freezed == so2
+          ? _value.so2
+          : so2 // ignore: cast_nullable_to_non_nullable
+              as AqiIaqi?,
+      co: freezed == co
+          ? _value.co
+          : co // ignore: cast_nullable_to_non_nullable
+              as AqiIaqi?,
+      h: freezed == h
+          ? _value.h
+          : h // ignore: cast_nullable_to_non_nullable
+              as AqiIaqi?,
+      t: freezed == t
+          ? _value.t
+          : t // ignore: cast_nullable_to_non_nullable
+              as AqiIaqi?,
+      w: freezed == w
+          ? _value.w
+          : w // ignore: cast_nullable_to_non_nullable
+              as AqiIaqi?,
+      p: freezed == p
+          ? _value.p
+          : p // ignore: cast_nullable_to_non_nullable
+              as AqiIaqi?,
+      dew: freezed == dew
+          ? _value.dew
+          : dew // ignore: cast_nullable_to_non_nullable
+              as AqiIaqi?,
+      r: freezed == r
+          ? _value.r
+          : r // ignore: cast_nullable_to_non_nullable
+              as AqiIaqi?,
     ) as $Val);
   }
 
@@ -109,9 +160,13 @@ class _$AqiDetailCopyWithImpl<$Res, $Val extends AqiDetail>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $AqiDetailItemCopyWith<$Res> get co {
-    return $AqiDetailItemCopyWith<$Res>(_value.co, (value) {
-      return _then(_value.copyWith(co: value) as $Val);
+  $AqiIaqiCopyWith<$Res>? get pm25 {
+    if (_value.pm25 == null) {
+      return null;
+    }
+
+    return $AqiIaqiCopyWith<$Res>(_value.pm25!, (value) {
+      return _then(_value.copyWith(pm25: value) as $Val);
     });
   }
 
@@ -119,9 +174,13 @@ class _$AqiDetailCopyWithImpl<$Res, $Val extends AqiDetail>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $AqiDetailItemCopyWith<$Res> get no2 {
-    return $AqiDetailItemCopyWith<$Res>(_value.no2, (value) {
-      return _then(_value.copyWith(no2: value) as $Val);
+  $AqiIaqiCopyWith<$Res>? get pm10 {
+    if (_value.pm10 == null) {
+      return null;
+    }
+
+    return $AqiIaqiCopyWith<$Res>(_value.pm10!, (value) {
+      return _then(_value.copyWith(pm10: value) as $Val);
     });
   }
 
@@ -129,8 +188,12 @@ class _$AqiDetailCopyWithImpl<$Res, $Val extends AqiDetail>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $AqiDetailItemCopyWith<$Res> get o3 {
-    return $AqiDetailItemCopyWith<$Res>(_value.o3, (value) {
+  $AqiIaqiCopyWith<$Res>? get o3 {
+    if (_value.o3 == null) {
+      return null;
+    }
+
+    return $AqiIaqiCopyWith<$Res>(_value.o3!, (value) {
       return _then(_value.copyWith(o3: value) as $Val);
     });
   }
@@ -139,8 +202,26 @@ class _$AqiDetailCopyWithImpl<$Res, $Val extends AqiDetail>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $AqiDetailItemCopyWith<$Res> get so2 {
-    return $AqiDetailItemCopyWith<$Res>(_value.so2, (value) {
+  $AqiIaqiCopyWith<$Res>? get no2 {
+    if (_value.no2 == null) {
+      return null;
+    }
+
+    return $AqiIaqiCopyWith<$Res>(_value.no2!, (value) {
+      return _then(_value.copyWith(no2: value) as $Val);
+    });
+  }
+
+  /// Create a copy of AqiDetail
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AqiIaqiCopyWith<$Res>? get so2 {
+    if (_value.so2 == null) {
+      return null;
+    }
+
+    return $AqiIaqiCopyWith<$Res>(_value.so2!, (value) {
       return _then(_value.copyWith(so2: value) as $Val);
     });
   }
@@ -149,9 +230,97 @@ class _$AqiDetailCopyWithImpl<$Res, $Val extends AqiDetail>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $AqiDetailItemCopyWith<$Res> get pm25 {
-    return $AqiDetailItemCopyWith<$Res>(_value.pm25, (value) {
-      return _then(_value.copyWith(pm25: value) as $Val);
+  $AqiIaqiCopyWith<$Res>? get co {
+    if (_value.co == null) {
+      return null;
+    }
+
+    return $AqiIaqiCopyWith<$Res>(_value.co!, (value) {
+      return _then(_value.copyWith(co: value) as $Val);
+    });
+  }
+
+  /// Create a copy of AqiDetail
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AqiIaqiCopyWith<$Res>? get h {
+    if (_value.h == null) {
+      return null;
+    }
+
+    return $AqiIaqiCopyWith<$Res>(_value.h!, (value) {
+      return _then(_value.copyWith(h: value) as $Val);
+    });
+  }
+
+  /// Create a copy of AqiDetail
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AqiIaqiCopyWith<$Res>? get t {
+    if (_value.t == null) {
+      return null;
+    }
+
+    return $AqiIaqiCopyWith<$Res>(_value.t!, (value) {
+      return _then(_value.copyWith(t: value) as $Val);
+    });
+  }
+
+  /// Create a copy of AqiDetail
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AqiIaqiCopyWith<$Res>? get w {
+    if (_value.w == null) {
+      return null;
+    }
+
+    return $AqiIaqiCopyWith<$Res>(_value.w!, (value) {
+      return _then(_value.copyWith(w: value) as $Val);
+    });
+  }
+
+  /// Create a copy of AqiDetail
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AqiIaqiCopyWith<$Res>? get p {
+    if (_value.p == null) {
+      return null;
+    }
+
+    return $AqiIaqiCopyWith<$Res>(_value.p!, (value) {
+      return _then(_value.copyWith(p: value) as $Val);
+    });
+  }
+
+  /// Create a copy of AqiDetail
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AqiIaqiCopyWith<$Res>? get dew {
+    if (_value.dew == null) {
+      return null;
+    }
+
+    return $AqiIaqiCopyWith<$Res>(_value.dew!, (value) {
+      return _then(_value.copyWith(dew: value) as $Val);
+    });
+  }
+
+  /// Create a copy of AqiDetail
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AqiIaqiCopyWith<$Res>? get r {
+    if (_value.r == null) {
+      return null;
+    }
+
+    return $AqiIaqiCopyWith<$Res>(_value.r!, (value) {
+      return _then(_value.copyWith(r: value) as $Val);
     });
   }
 }
@@ -165,22 +334,43 @@ abstract class _$$AqiDetailImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'co') AqiDetailItem co,
-      @JsonKey(name: 'no2') AqiDetailItem no2,
-      @JsonKey(name: 'o3') AqiDetailItem o3,
-      @JsonKey(name: 'so2') AqiDetailItem so2,
-      @JsonKey(name: 'pm25') AqiDetailItem pm25});
+      {AqiIaqi? pm25,
+      AqiIaqi? pm10,
+      AqiIaqi? o3,
+      AqiIaqi? no2,
+      AqiIaqi? so2,
+      AqiIaqi? co,
+      AqiIaqi? h,
+      AqiIaqi? t,
+      AqiIaqi? w,
+      AqiIaqi? p,
+      AqiIaqi? dew,
+      AqiIaqi? r});
 
   @override
-  $AqiDetailItemCopyWith<$Res> get co;
+  $AqiIaqiCopyWith<$Res>? get pm25;
   @override
-  $AqiDetailItemCopyWith<$Res> get no2;
+  $AqiIaqiCopyWith<$Res>? get pm10;
   @override
-  $AqiDetailItemCopyWith<$Res> get o3;
+  $AqiIaqiCopyWith<$Res>? get o3;
   @override
-  $AqiDetailItemCopyWith<$Res> get so2;
+  $AqiIaqiCopyWith<$Res>? get no2;
   @override
-  $AqiDetailItemCopyWith<$Res> get pm25;
+  $AqiIaqiCopyWith<$Res>? get so2;
+  @override
+  $AqiIaqiCopyWith<$Res>? get co;
+  @override
+  $AqiIaqiCopyWith<$Res>? get h;
+  @override
+  $AqiIaqiCopyWith<$Res>? get t;
+  @override
+  $AqiIaqiCopyWith<$Res>? get w;
+  @override
+  $AqiIaqiCopyWith<$Res>? get p;
+  @override
+  $AqiIaqiCopyWith<$Res>? get dew;
+  @override
+  $AqiIaqiCopyWith<$Res>? get r;
 }
 
 /// @nodoc
@@ -196,33 +386,68 @@ class __$$AqiDetailImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? co = null,
-    Object? no2 = null,
-    Object? o3 = null,
-    Object? so2 = null,
-    Object? pm25 = null,
+    Object? pm25 = freezed,
+    Object? pm10 = freezed,
+    Object? o3 = freezed,
+    Object? no2 = freezed,
+    Object? so2 = freezed,
+    Object? co = freezed,
+    Object? h = freezed,
+    Object? t = freezed,
+    Object? w = freezed,
+    Object? p = freezed,
+    Object? dew = freezed,
+    Object? r = freezed,
   }) {
     return _then(_$AqiDetailImpl(
-      co: null == co
-          ? _value.co
-          : co // ignore: cast_nullable_to_non_nullable
-              as AqiDetailItem,
-      no2: null == no2
-          ? _value.no2
-          : no2 // ignore: cast_nullable_to_non_nullable
-              as AqiDetailItem,
-      o3: null == o3
-          ? _value.o3
-          : o3 // ignore: cast_nullable_to_non_nullable
-              as AqiDetailItem,
-      so2: null == so2
-          ? _value.so2
-          : so2 // ignore: cast_nullable_to_non_nullable
-              as AqiDetailItem,
-      pm25: null == pm25
+      pm25: freezed == pm25
           ? _value.pm25
           : pm25 // ignore: cast_nullable_to_non_nullable
-              as AqiDetailItem,
+              as AqiIaqi?,
+      pm10: freezed == pm10
+          ? _value.pm10
+          : pm10 // ignore: cast_nullable_to_non_nullable
+              as AqiIaqi?,
+      o3: freezed == o3
+          ? _value.o3
+          : o3 // ignore: cast_nullable_to_non_nullable
+              as AqiIaqi?,
+      no2: freezed == no2
+          ? _value.no2
+          : no2 // ignore: cast_nullable_to_non_nullable
+              as AqiIaqi?,
+      so2: freezed == so2
+          ? _value.so2
+          : so2 // ignore: cast_nullable_to_non_nullable
+              as AqiIaqi?,
+      co: freezed == co
+          ? _value.co
+          : co // ignore: cast_nullable_to_non_nullable
+              as AqiIaqi?,
+      h: freezed == h
+          ? _value.h
+          : h // ignore: cast_nullable_to_non_nullable
+              as AqiIaqi?,
+      t: freezed == t
+          ? _value.t
+          : t // ignore: cast_nullable_to_non_nullable
+              as AqiIaqi?,
+      w: freezed == w
+          ? _value.w
+          : w // ignore: cast_nullable_to_non_nullable
+              as AqiIaqi?,
+      p: freezed == p
+          ? _value.p
+          : p // ignore: cast_nullable_to_non_nullable
+              as AqiIaqi?,
+      dew: freezed == dew
+          ? _value.dew
+          : dew // ignore: cast_nullable_to_non_nullable
+              as AqiIaqi?,
+      r: freezed == r
+          ? _value.r
+          : r // ignore: cast_nullable_to_non_nullable
+              as AqiIaqi?,
     ));
   }
 }
@@ -231,34 +456,50 @@ class __$$AqiDetailImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$AqiDetailImpl implements _AqiDetail {
   const _$AqiDetailImpl(
-      {@JsonKey(name: 'co') required this.co,
-      @JsonKey(name: 'no2') required this.no2,
-      @JsonKey(name: 'o3') required this.o3,
-      @JsonKey(name: 'so2') required this.so2,
-      @JsonKey(name: 'pm25') required this.pm25});
+      {this.pm25,
+      this.pm10,
+      this.o3,
+      this.no2,
+      this.so2,
+      this.co,
+      this.h,
+      this.t,
+      this.w,
+      this.p,
+      this.dew,
+      this.r});
 
   factory _$AqiDetailImpl.fromJson(Map<String, dynamic> json) =>
       _$$AqiDetailImplFromJson(json);
 
   @override
-  @JsonKey(name: 'co')
-  final AqiDetailItem co;
+  final AqiIaqi? pm25;
   @override
-  @JsonKey(name: 'no2')
-  final AqiDetailItem no2;
+  final AqiIaqi? pm10;
   @override
-  @JsonKey(name: 'o3')
-  final AqiDetailItem o3;
+  final AqiIaqi? o3;
   @override
-  @JsonKey(name: 'so2')
-  final AqiDetailItem so2;
+  final AqiIaqi? no2;
   @override
-  @JsonKey(name: 'pm25')
-  final AqiDetailItem pm25;
+  final AqiIaqi? so2;
+  @override
+  final AqiIaqi? co;
+  @override
+  final AqiIaqi? h;
+  @override
+  final AqiIaqi? t;
+  @override
+  final AqiIaqi? w;
+  @override
+  final AqiIaqi? p;
+  @override
+  final AqiIaqi? dew;
+  @override
+  final AqiIaqi? r;
 
   @override
   String toString() {
-    return 'AqiDetail(co: $co, no2: $no2, o3: $o3, so2: $so2, pm25: $pm25)';
+    return 'AqiDetail(pm25: $pm25, pm10: $pm10, o3: $o3, no2: $no2, so2: $so2, co: $co, h: $h, t: $t, w: $w, p: $p, dew: $dew, r: $r)';
   }
 
   @override
@@ -266,16 +507,24 @@ class _$AqiDetailImpl implements _AqiDetail {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AqiDetailImpl &&
-            (identical(other.co, co) || other.co == co) &&
-            (identical(other.no2, no2) || other.no2 == no2) &&
+            (identical(other.pm25, pm25) || other.pm25 == pm25) &&
+            (identical(other.pm10, pm10) || other.pm10 == pm10) &&
             (identical(other.o3, o3) || other.o3 == o3) &&
+            (identical(other.no2, no2) || other.no2 == no2) &&
             (identical(other.so2, so2) || other.so2 == so2) &&
-            (identical(other.pm25, pm25) || other.pm25 == pm25));
+            (identical(other.co, co) || other.co == co) &&
+            (identical(other.h, h) || other.h == h) &&
+            (identical(other.t, t) || other.t == t) &&
+            (identical(other.w, w) || other.w == w) &&
+            (identical(other.p, p) || other.p == p) &&
+            (identical(other.dew, dew) || other.dew == dew) &&
+            (identical(other.r, r) || other.r == r));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, co, no2, o3, so2, pm25);
+  int get hashCode => Object.hash(
+      runtimeType, pm25, pm10, o3, no2, so2, co, h, t, w, p, dew, r);
 
   /// Create a copy of AqiDetail
   /// with the given fields replaced by the non-null parameter values.
@@ -295,31 +544,46 @@ class _$AqiDetailImpl implements _AqiDetail {
 
 abstract class _AqiDetail implements AqiDetail {
   const factory _AqiDetail(
-          {@JsonKey(name: 'co') required final AqiDetailItem co,
-          @JsonKey(name: 'no2') required final AqiDetailItem no2,
-          @JsonKey(name: 'o3') required final AqiDetailItem o3,
-          @JsonKey(name: 'so2') required final AqiDetailItem so2,
-          @JsonKey(name: 'pm25') required final AqiDetailItem pm25}) =
-      _$AqiDetailImpl;
+      {final AqiIaqi? pm25,
+      final AqiIaqi? pm10,
+      final AqiIaqi? o3,
+      final AqiIaqi? no2,
+      final AqiIaqi? so2,
+      final AqiIaqi? co,
+      final AqiIaqi? h,
+      final AqiIaqi? t,
+      final AqiIaqi? w,
+      final AqiIaqi? p,
+      final AqiIaqi? dew,
+      final AqiIaqi? r}) = _$AqiDetailImpl;
 
   factory _AqiDetail.fromJson(Map<String, dynamic> json) =
       _$AqiDetailImpl.fromJson;
 
   @override
-  @JsonKey(name: 'co')
-  AqiDetailItem get co;
+  AqiIaqi? get pm25;
   @override
-  @JsonKey(name: 'no2')
-  AqiDetailItem get no2;
+  AqiIaqi? get pm10;
   @override
-  @JsonKey(name: 'o3')
-  AqiDetailItem get o3;
+  AqiIaqi? get o3;
   @override
-  @JsonKey(name: 'so2')
-  AqiDetailItem get so2;
+  AqiIaqi? get no2;
   @override
-  @JsonKey(name: 'pm25')
-  AqiDetailItem get pm25;
+  AqiIaqi? get so2;
+  @override
+  AqiIaqi? get co;
+  @override
+  AqiIaqi? get h;
+  @override
+  AqiIaqi? get t;
+  @override
+  AqiIaqi? get w;
+  @override
+  AqiIaqi? get p;
+  @override
+  AqiIaqi? get dew;
+  @override
+  AqiIaqi? get r;
 
   /// Create a copy of AqiDetail
   /// with the given fields replaced by the non-null parameter values.

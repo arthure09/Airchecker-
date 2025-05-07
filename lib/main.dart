@@ -1,205 +1,311 @@
-import 'package:aqi_map/aqi_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:aqi_map/model/api/aqi_info/aqi_info.dart';
+import 'package:dio/dio.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter/foundation.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-Future main() async {
+part 'main.g.dart';
+
+final selectedCityProvider = StateProvider<String>((_) => 'here');
+
+@riverpod
+Dio appDio(AppDioRef ref) {
+  final token = dotenv.env['WAQI_API_KEY']?.trim() ?? '';
+  if (token.isEmpty) throw StateError('Missing WAQI_API_KEY in .env');
+
+  final dio = Dio(BaseOptions(
+    baseUrl: 'https://api.waqi.info',
+    queryParameters: {'token': token},
+  ));
+
+  if (kDebugMode) {
+    dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (opts, handler) {
+        print('🌐 Request → ${opts.uri}');
+        handler.next(opts);
+      },
+      onResponse: (resp, handler) {
+        print('🌐 Response → ${resp.data}');
+        handler.next(resp);
+      },
+      onError: (e, handler) {
+        print('❌ Dio error → ${e.message}');
+        handler.next(e);
+      },
+    ));
+  }
+
+  return dio;
+}
+
+class AqiInfo {
+  final int aqi;
+  final String cityName;
+  AqiInfo(this.aqi, this.cityName);
+
+  factory AqiInfo.fromJson(Map<String, dynamic> json) {
+    final data = json['data'] as Map<String, dynamic>;
+    final city = data['city'] as Map<String, dynamic>;
+    return AqiInfo(
+      data['aqi'] as int,
+      city['name'] as String,
+    );
+  }
+}
+
+final aqiProvider = FutureProvider<AqiInfo>((ref) async {
+  final city = ref.watch(selectedCityProvider);
+  final dio = ref.watch(appDioProvider);
+  final resp = await dio.get('/feed/$city/');
+  final json = resp.data as Map<String, dynamic>;
+  if (json['status'] != 'ok') {
+    throw Exception('Unknown station');
+  }
+  return AqiInfo.fromJson(json);
+});
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
   runApp(const ProviderScope(child: AqiApp()));
 }
 
 class AqiApp extends StatelessWidget {
   const AqiApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        useMaterial3: true,
-      ),
-      home: const AqiScreen(),
+      title: 'AirChecker',
+      theme: ThemeData.dark(useMaterial3: true),
+      home: const AqiHome(),
     );
   }
 }
 
-class AqiScreen extends ConsumerWidget {
-  const AqiScreen({super.key});
+class AqiHome extends ConsumerWidget {
+  const AqiHome({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final aqiInfo = ref.watch(aqiNotifierProvider);
+    final city = ref.watch(selectedCityProvider);
+    final state = ref.watch(aqiProvider);
+    final controller = TextEditingController(text: city);
 
     return Scaffold(
       backgroundColor: const Color(0xFF121212),
-      body: aqiInfo.when(
-        data: (data) => Padding(
-          padding: const EdgeInsets.all(24.0),
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: SizedBox(
+          height: 40,
+          child: TextField(
+            controller: controller,
+            style: const TextStyle(color: Colors.white),
+            textInputAction: TextInputAction.search,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(vertical: 0),
+              hintText: 'Search city…',
+              hintStyle: TextStyle(color: Colors.white54),
+              prefixIcon: Icon(Icons.search, color: Colors.white54),
+              filled: true,
+              fillColor: Colors.grey.shade900,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: BorderSide.none,
+              ),
+            ),
+            onSubmitted: (value) {
+              final slug = value.trim();
+              if (slug.isNotEmpty) {
+                ref.read(selectedCityProvider.notifier).state = slug;
+              }
+            },
+          ),
+        ),
+      ),
+      body: state.when(
+        loading: () => const Center(child: CircularProgressIndicator(color: Colors.tealAccent)),
+        error: (err, _) {
+          final msg = err.toString().contains('Unknown station')
+              ? "Sorry, we couldn't find your city at the moment.\nPlease try again."
+              : err.toString();
+          return Center(
+            child: Text(
+              msg,
+              style: const TextStyle(color: Colors.redAccent),
+              textAlign: TextAlign.center,
+            ),
+          );
+        },
+        data: (info) => _buildContent(info),
+      ),
+    );
+  }
+
+  Widget _buildContent(AqiInfo info) {
+    final color = _getStatusColor(info.aqi);
+
+    return SafeArea(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              location(data.city.cityName),
-              const SizedBox(height: 40),
-              aqiValue(data),
-              const SizedBox(height: 40),
-              aqiDetail(data),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Hi Arthur, 😊',
+                  style: TextStyle(
+                    color: Colors.grey.shade300,
+                    fontSize: 55,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: const Text(
+                  'How is the air today?',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              Card(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                color: const Color(0xFF1E1E1E),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        info.cityName,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 18),
+                      SizedBox(
+                        height: 160,
+                        child: SfRadialGauge(
+                          axes: <RadialAxis>[
+                            RadialAxis(
+                              showTicks: false,
+                              showLabels: false,
+                              startAngle: 180,
+                              endAngle: 0,
+                              minimum: 0,
+                              maximum: 300,
+                              axisLineStyle: AxisLineStyle(
+                                thickness: 16,
+                                cornerStyle: CornerStyle.bothCurve,
+                                color: Colors.grey.shade800,
+                              ),
+                              pointers: <GaugePointer>[
+                                RangePointer(
+                                  value: info.aqi.toDouble(),
+                                  cornerStyle: CornerStyle.bothCurve,
+                                  width: 16,
+                                  sizeUnit: GaugeSizeUnit.logicalPixel,
+                                  gradient: const SweepGradient(
+                                    colors: [
+                                      Colors.greenAccent,
+                                      Colors.yellowAccent,
+                                      Colors.orangeAccent,
+                                      Colors.redAccent,
+                                      Colors.purpleAccent
+                                    ],
+                                    stops: [0, .2, .4, .6, .8],
+                                  ),
+                                )
+                              ],
+                              annotations: <GaugeAnnotation>[
+                                GaugeAnnotation(
+                                  positionFactor: 0.6,
+                                  angle: 90,
+                                  widget: Column(
+                                    children: [
+                                      Text(
+                                        '${info.aqi}',
+                                        style: TextStyle(
+                                          fontSize: 48,
+                                          fontWeight: FontWeight.bold,
+                                          color: color,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                        decoration: BoxDecoration(
+                                          color: color.withOpacity(0.2),
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        child: Text(
+                                          _getStatusLabel(info.aqi),
+                                          style: TextStyle(
+                                            color: color,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        _getEmoji(info.aqi),
+                        style: const TextStyle(fontSize: 32),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
-        loading: () => const Center(
-          child: CircularProgressIndicator(
-            color: Colors.tealAccent,
-          ),
-        ),
-        error: (error, _) => Center(
-          child: Text(
-            'Error: $error',
-            style: const TextStyle(color: Colors.redAccent),
-          ),
-        ),
       ),
     );
   }
 
-  Widget location(String location) {
-    return Text(
-      location,
-      style: const TextStyle(
-        color: Colors.white,
-        fontSize: 32,
-        fontWeight: FontWeight.w300,
-      ),
-      textAlign: TextAlign.center,
-    );
+  Color _getStatusColor(int aqi) {
+    if (aqi <= 50) return Colors.greenAccent;
+    if (aqi <= 100) return Colors.yellowAccent;
+    if (aqi <= 150) return Colors.orangeAccent;
+    if (aqi <= 200) return Colors.redAccent;
+    if (aqi <= 300) return Colors.purpleAccent;
+    return Colors.deepPurpleAccent;
   }
 
-  Widget aqiValue(AqiInfo data) {
-    final Color statusColor = _getStatusColor(data.status);
-
-    return Column(
-      children: [
-        Text(
-          data.aqi.toString(),
-          style: TextStyle(
-            fontSize: 96,
-            color: statusColor,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color: statusColor.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Text(
-            data.status,
-            style: TextStyle(
-              color: statusColor,
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-      ],
-    );
+  String _getStatusLabel(int aqi) {
+    if (aqi <= 50) return 'GOOD';
+    if (aqi <= 100) return 'MODERATE';
+    if (aqi <= 150) return 'HAZARDOUS';
+    if (aqi <= 200) return 'UNHEALTHY';
+    if (aqi <= 300) return 'VERY UNHEALTHY';
+    return 'SEVERE';
   }
 
-  Widget aqiDetail(AqiInfo data) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        children: [
-          pollutantRow(
-              'PM2.5', data.aqiDetail.pm25.value, Colors.orangeAccent),
-          pollutantRow(
-              'PM10', data.aqiDetail.o3.value, Colors.purpleAccent),
-          pollutantRow(
-              'NO₂', data.aqiDetail.no2.value, Colors.greenAccent),
-          pollutantRow(
-              'SO₂', data.aqiDetail.so2.value, Colors.blueAccent),
-          pollutantRow('CO', data.aqiDetail.co.value, Colors.redAccent),
-        ],
-      ),
-    );
-  }
-
-  Widget pollutantRow(String label, int? value, Color color) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 60,
-            child: Text(
-              label,
-              style: const TextStyle(
-                color: Colors.white70,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Container(
-              height: 6,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(3),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: value ?? 0,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: BorderRadius.circular(3),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(width: 16),
-          SizedBox(
-            width: 40,
-            child: Text(
-              value.toString(),
-              style: const TextStyle(
-                color: Colors.white70,
-                fontWeight: FontWeight.w500,
-              ),
-              textAlign: TextAlign.end,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Color _getStatusColor(String status) {
-    switch (status) {
-      case 'GOOD':
-        return Colors.greenAccent;
-      case 'MODERATE':
-        return Colors.yellowAccent;
-      case 'HAZARDOUS':
-        return Colors.orangeAccent;
-      case 'UNHEALTHY':
-        return Colors.redAccent;
-      case 'VERY UNHEALTHY':
-        return Colors.purpleAccent;
-      case 'SEVERE':
-        return Colors.deepPurpleAccent;
-      default:
-        return Colors.white;
-    }
+  String _getEmoji(int aqi) {
+    if (aqi <= 50) return '😊';
+    if (aqi <= 100) return '😐';
+    if (aqi <= 150) return '😷';
+    if (aqi <= 200) return '🤢';
+    return '☠️';
   }
 }
